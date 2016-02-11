@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<eventPublisher name="serviceFailureEmailNotification"
+  statistics="disable" trace="disable" xmlns="http://wso2.org/carbon/eventpublisher">
+  <from streamName="org.wso2.service.failure.notification.stream" version="1.0.0"/>
+  <mapping customMapping="enable" type="text">
+    <inline>Following API has been failed:
+        API Name : {{api_name}}
+    
+    </inline>
+  </mapping>
+  <to eventAdapterType="email">
+    <property name="email.address">wsocep@gmail.com</property>
+    <property name="email.type">text/plain</property>
+    <property name="email.subject">API Failure Notification</property>
+  </to>
+</eventPublisher>
+                                    

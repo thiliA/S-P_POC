@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<proxy xmlns="http://ws.apache.org/ns/synapse"
+       name="getOrgInfo"
+       transports="https,http"
+       statistics="disable"
+       trace="disable"
+       startOnLoad="true">
+   <target faultSequence="apiFailureSequence">
+      <inSequence>
+         <property name="orgId"
+                   expression="//getOrgInfo/request/orgId"
+                   scope="default"
+                   type="STRING"/>
+         <property name="API_Name"
+                   value="getRatingsByEntity"
+                   scope="default"
+                   type="STRING"/>
+         <payloadFactory media-type="xml">
+            <format>
+               <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+                                 xmlns:ns="http://www.openapplications.org/oagis/9"
+                                 xmlns:ser="http://integration.standardandpoors.com/ServiceSchema">
+                  <soapenv:Header/>
+                  <soapenv:Body>
+                     <ns2:GetRatingsByEntity xmlns:ns2="http://integration.standardandpoors.com/ServiceSchema"
+                                             xmlns:ns1="http://www.openapplications.org/oagis/9">
+                        <ns1:ApplicationArea>
+                           <ns1:Sender>
+                              <ns1:AuthorizationID schemeAgencyID="CORE">M12</ns1:AuthorizationID>
+                           </ns1:Sender>
+                           <ns1:CreationDateTime>2015-11-05</ns1:CreationDateTime>
+                        </ns1:ApplicationArea>
+                        <ns2:DataArea>
+                           <ns2:RatingsByEntity>
+                              <ns2:Organization>
+                                 <ns1:PartyIDs>
+                                    <ns1:ID schemeAgencyID="CORE">$ctx:orgId</ns1:ID>
+                                 </ns1:PartyIDs>
+                              </ns2:Organization>
+                           </ns2:RatingsByEntity>
+                        </ns2:DataArea>
+                     </ns2:GetRatingsByEntity>
+                  </soapenv:Body>
+               </soapenv:Envelope>
+            </format>
+            <args/>
+         </payloadFactory>
+         <header name="X-JWT-Assertion" scope="transport" action="remove"/>
+         <call>
+            <endpoint>
+               <address uri="http://ewtestforum14.webservices.standardandpoors.com/core_rating_poc"
+                        format="soap11"/>
+            </endpoint>
+         </call>
+         <enrich>
+            <source type="envelope" clone="true"/>
+            <target type="property" property="payload1"/>
+         </enrich>
+         <header name="Action" scope="default" value="urn:getFinancialStatements"/>
+         <property name="Accept" scope="transport" action="remove"/>
+         <property name="Content-Type"
+                   value="text/xml; charset=UTF-8"
+                   scope="axis2"
+                   type="STRING"/>
+         <property name="API_Name"
+                   value="getFinancialStatements"
+                   scope="default"
+                   type="STRING"/>
+         <payloadFactory media-type="xml">
+            <format>
+               <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+                                 xmlns:fin="http://integration.standardandpoors.com/ServiceSchema/v3/financial">
+                  <soapenv:Header/>
+                  <soapenv:Body>
+                     <fin:getFinancialStatements>
+                        <fin:FinancialStatement dataSource="AB"
+                                                dataStage="FINAL"
+                                                orgId="108569"
+                                                orgIdType="CORE"
+                                                periodEndDate="2015-03-31"
+                                                periodName="A"
+                                                periodType="Annual"/>
+                        <fin:FinancialStatement dataSource="AB"
+                                                dataStage="FINAL"
+                                                orgId="108569"
+                                                orgIdType="CORE"
+                                                periodEndDate="2014-03-31"
+                                                periodName="A"
+                                                periodType="Annual"/>
+                        <fin:FinancialStatement dataSource="AB"
+                                                dataStage="FINAL"
+                                                orgId="108569"
+                                                orgIdType="CORE"
+                                                periodEndDate="2013-03-31"
+                                                periodName="A"
+                                                periodType="Annual"/>
+                        <fin:FinancialStatement dataSource="AB"
+                                                dataStage="FINAL"
+                                                orgId="108569"
+                                                orgIdType="CORE"
+                                                periodEndDate="2012-03-31"
+                                                periodName="A"
+                                                periodType="Annual"/>
+                        <fin:FinancialStatement dataSource="AB"
+                                                dataStage="FINAL"
+                                                orgId="108569"
+                                                orgIdType="CORE"
+                                                periodEndDate="2011-03-31"
+                                                periodName="A"
+                                                periodType="Annual"/>
+                     </fin:getFinancialStatements>
+                  </soapenv:Body>
+               </soapenv:Envelope>
+            </format>
+            <args/>
+         </payloadFactory>
+         <call>
+            <endpoint>
+               <address uri="http://ewtestforum14.webservices.standardandpoors.com/VFD_FS_POC"
+                        format="soap11"/>
+            </endpoint>
+         </call>
+         <enrich>
+            <source type="envelope" clone="true"/>
+            <target type="property" property="payload2"/>
+         </enrich>
+         <payloadFactory media-type="xml">
+            <format>
+               <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+                  <soapenv:Header/>
+                  <soapenv:Body>
+                     <getOrgInfo>
+                        <getRatingsByEntity>
+                           <DebtTypeCode>$1</DebtTypeCode>
+                           <RatingTypeCode>$2</RatingTypeCode>
+                           <RatingScore>$3</RatingScore>
+                           <EffectiveDate>$4</EffectiveDate>
+                        </getRatingsByEntity>
+                        <getFinancialStatements>
+                           <Year>$5</Year>
+                           <Revenue>$6</Revenue>
+                           <NetIncome>$7</NetIncome>
+                           <Year>$8</Year>
+                           <Revenue>$9</Revenue>
+                           <NetIncome>$10</NetIncome>
+                           <Year>$11</Year>
+                           <Revenue>$12</Revenue>
+                           <NetIncome>$13</NetIncome>
+                           <Year>$14</Year>
+                           <Revenue>$15</Revenue>
+                           <NetIncome>$16</NetIncome>
+                           <Year>$17</Year>
+                           <Revenue>$18</Revenue>
+                           <NetIncome>$19</NetIncome>
+                        </getFinancialStatements>
+                     </getOrgInfo>
+                  </soapenv:Body>
+               </soapenv:Envelope>
+            </format>
+            <args>
+               <arg xmlns:ss="http://integration.standardandpoors.com/ServiceSchema"
+                    evaluator="xml"
+                    expression="$ctx:payload1//ss:ShowRatingsByEntity/ss:DataArea/ss:RatingsByEntity/ss:Organization/ss:Rating[1]/ss:DebtTypeCode"/>
+               <arg xmlns:ss="http://integration.standardandpoors.com/ServiceSchema"
+                    evaluator="xml"
+                    expression="$ctx:payload1//ss:ShowRatingsByEntity/ss:DataArea/ss:RatingsByEntity/ss:Organization/ss:Rating[1]/ss:RatingTypeCode"/>
+               <arg xmlns:ss="http://integration.standardandpoors.com/ServiceSchema"
+                    evaluator="xml"
+                    expression="$ctx:payload1//ss:ShowRatingsByEntity/ss:DataArea/ss:RatingsByEntity/ss:Organization/ss:Rating[1]/ss:Rating/ss:RatingScore"/>
+               <arg xmlns:ss="http://integration.standardandpoors.com/ServiceSchema"
+                    evaluator="xml"
+                    expression="$ctx:payload1//ss:ShowRatingsByEntity/ss:DataArea/ss:RatingsByEntity/ss:Organization/ss:Rating[1]/ss:EffectiveDate"/>
+               <arg xmlns:fin="http://integration.standardandpoors.com/ServiceSchema/v3/financial"
+                    evaluator="xml"
+                    expression="($ctx:payload2//fin:FinancialStatement/fin:Property[@name='FISCAL_YEAR'])[1]"/>
+               <arg xmlns:fin="http://integration.standardandpoors.com/ServiceSchema/v3/financial"
+                    evaluator="xml"
+                    expression="($ctx:payload2//fin:FinancialStatement/fin:DP[@mne='REVTA'])[1]"/>
+               <arg xmlns:fin="http://integration.standardandpoors.com/ServiceSchema/v3/financial"
+                    evaluator="xml"
+                    expression="($ctx:payload2//fin:FinancialStatement/fin:DP[@mne='NI'])[1]"/>
+               <arg xmlns:fin="http://integration.standardandpoors.com/ServiceSchema/v3/financial"
+                    evaluator="xml"
+                    expression="($ctx:payload2//fin:FinancialStatement/fin:Property[@name='FISCAL_YEAR'])[2]"/>
+               <arg xmlns:fin="http://integration.standardandpoors.com/ServiceSchema/v3/financial"
+                    evaluator="xml"
+                    expression="($ctx:payload2//fin:FinancialStatement/fin:DP[@mne='REVTA'])[2]"/>
+               <arg xmlns:fin="http://integration.standardandpoors.com/ServiceSchema/v3/financial"
+                    evaluator="xml"
+                    expression="($ctx:payload2//fin:FinancialStatement/fin:DP[@mne='NI'])[2]"/>
+               <arg xmlns:fin="http://integration.standardandpoors.com/ServiceSchema/v3/financial"
+                    evaluator="xml"
+                    expression="($ctx:payload2//fin:FinancialStatement/fin:Property[@name='FISCAL_YEAR'])[3]"/>
+               <arg xmlns:fin="http://integration.standardandpoors.com/ServiceSchema/v3/financial"
+                    evaluator="xml"
+                    expression="($ctx:payload2//fin:FinancialStatement/fin:DP[@mne='REVTA'])[3]"/>
+               <arg xmlns:fin="http://integration.standardandpoors.com/ServiceSchema/v3/financial"
+                    evaluator="xml"
+                    expression="($ctx:payload2//fin:FinancialStatement/fin:DP[@mne='NI'])[3]"/>
+               <arg xmlns:fin="http://integration.standardandpoors.com/ServiceSchema/v3/financial"
+                    evaluator="xml"
+                    expression="($ctx:payload2//fin:FinancialStatement/fin:Property[@name='FISCAL_YEAR'])[4]"/>
+               <arg xmlns:fin="http://integration.standardandpoors.com/ServiceSchema/v3/financial"
+                    evaluator="xml"
+                    expression="($ctx:payload2//fin:FinancialStatement/fin:DP[@mne='REVTA'])[4]"/>
+               <arg xmlns:fin="http://integration.standardandpoors.com/ServiceSchema/v3/financial"
+                    evaluator="xml"
+                    expression="($ctx:payload2//fin:FinancialStatement/fin:DP[@mne='NI'])[4]"/>
+               <arg xmlns:fin="http://integration.standardandpoors.com/ServiceSchema/v3/financial"
+                    evaluator="xml"
+                    expression="($ctx:payload2//fin:FinancialStatement/fin:Property[@name='FISCAL_YEAR'])[5]"/>
+               <arg xmlns:fin="http://integration.standardandpoors.com/ServiceSchema/v3/financial"
+                    evaluator="xml"
+                    expression="($ctx:payload2//fin:FinancialStatement/fin:DP[@mne='REVTA'])[5]"/>
+               <arg xmlns:fin="http://integration.standardandpoors.com/ServiceSchema/v3/financial"
+                    evaluator="xml"
+                    expression="($ctx:payload2//fin:FinancialStatement/fin:DP[@mne='NI'])[5]"/>
+            </args>
+         </payloadFactory>
+         <property name="API_Name" scope="transport" action="remove"/>
+         <log level="full"/>
+         <respond/>
+      </inSequence>
+      <outSequence/>
+   </target>
+   <description/>
+</proxy>
+                                

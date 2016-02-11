@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<eventPublisher name="emailPublisherError" statistics="disable"
+  trace="disable" xmlns="http://wso2.org/carbon/eventpublisher">
+  <from streamName="org.wso2.error.alert.stream" version="1.0.0"/>
+  <mapping customMapping="enable" type="text">
+    <inline> SLA threshold for following API has exceeded!! 
+    API Version : {{api_version}}
+    API Name : {{api}}
+    API Publisher Name : {{apiPublisher}}
+    Fault Count : {{fault_count}}
+    </inline>
+  </mapping>
+  <to eventAdapterType="email">
+    <property name="email.address">wsocep@gmail.com</property>
+    <property name="email.type">text/plain</property>
+    <property name="email.subject">API error notification</property>
+  </to>
+</eventPublisher>
+                                    

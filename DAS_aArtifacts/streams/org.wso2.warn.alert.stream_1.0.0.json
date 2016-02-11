@@ -1,0 +1,27 @@
+{
+  "streamId": "org.wso2.warn.alert.stream:1.0.0",
+  "name": "org.wso2.warn.alert.stream",
+  "version": "1.0.0",
+  "nickName": "",
+  "description": "",
+  "metaData": [],
+  "correlationData": [],
+  "payloadData": [
+    {
+      "name": "api_version",
+      "type": "STRING"
+    },
+    {
+      "name": "api",
+      "type": "STRING"
+    },
+    {
+      "name": "apiPublisher",
+      "type": "STRING"
+    },
+    {
+      "name": "fault_count",
+      "type": "LONG"
+    }
+  ]
+}

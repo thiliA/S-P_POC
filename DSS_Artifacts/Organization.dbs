@@ -1,0 +1,9 @@
+<data name="Organization" transports="http https local">
+   <config enableOData="true" id="orgDS">
+      <property name="driverClassName">com.mysql.jdbc.Driver</property>
+      <property name="url">jdbc:mysql://172.31.3.93:3306/orgdb</property>
+      <property name="username">root</property>
+      <property name="password">root</property>
+   </config>
+</data>
+

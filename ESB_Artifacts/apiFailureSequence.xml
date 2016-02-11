@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sequence name="apiFailureSequence" xmlns="http://ws.apache.org/ns/synapse">
+    <property action="remove" name="TRANSPORT_HEADERS" scope="axis2"/>
+    <filter regex="101503" source="get-property('ERROR_CODE')" xmlns:ns="http://org.apache.synapse/xsd">
+        <then>
+            <payloadFactory media-type="json">
+                <format>                  {
+    			"event": {
+        		"payloadData": {
+            		"error_code": "$ctx:ERROR_CODE",
+			"api_name": "$ctx:API_Name"
+        		}
+    			}
+		} </format>
+            </payloadFactory>
+            <property name="messageType" scope="axis2" value="application/json"/>
+            <property name="OUT_ONLY" scope="default" type="STRING" value="true"/>
+            <call>
+                <endpoint>
+                    <http method="POST" uri-template="http://ec2-52-73-89-33.compute-1.amazonaws.com:9764/endpoints/HttpReceiver"/>
+                </endpoint>
+            </call>
+            <payloadFactory media-type="text">
+                <format>{    "Error_message": "Failed to connect to $ctx:API_Name" API }</format>
+            </payloadFactory>
+            <property name="HTTP_SC" scope="axis2" value="404"/>
+            <respond/>
+        </then>
+        <else>
+            <log/>
+            <drop/>
+        </else>
+    </filter>
+</sequence>
+

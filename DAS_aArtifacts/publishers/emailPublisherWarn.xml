@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<eventPublisher name="emailPublisherWarn" statistics="disable"
+  trace="disable" xmlns="http://wso2.org/carbon/eventpublisher">
+  <from streamName="org.wso2.warn.alert.stream" version="1.0.0"/>
+  <mapping customMapping="enable" type="text">
+    <inline>
+    Following API has been failing for a certain amount of time. Please check the availability of it!
+    API Version : {{api_version}}
+    API Name : {{api}}
+    API Publisher Name : {{apiPublisher}}
+    Fault Count : {{fault_count}}
+    </inline>
+  </mapping>
+  <to eventAdapterType="email">
+    <property name="email.address">wsocep@gmail.com</property>
+    <property name="email.type">text/plain</property>
+    <property name="email.subject">API warning notification</property>
+  </to>
+</eventPublisher>
+                                    

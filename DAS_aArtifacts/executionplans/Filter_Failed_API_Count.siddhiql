@@ -1,0 +1,31 @@
+/* Enter a unique ExecutionPlan */
+@Plan:name('Filter_Failed_API_Count')
+
+/* Enter a unique description for ExecutionPlan */
+-- @Plan:description('ExecutionPlan')
+
+/* define streams/tables and write queries here ... */
+
+@Import('org.wso2.apimgt.statistics.fault:1.0.0')
+define stream inputStream (meta_clientType string, consumerKey string, context string, api_version string, api string, resourcePath string, method string, version string, errorCode string, errorMessage string, requestTime long, userId string, tenantDomain string, hostName string, apiPublisher string, applicationName string, applicationId string, protocol string);
+
+/*@Import('org.wso2.apim.fault.stream:1.0.0')
+define stream inputStream (meta_clientType string, consumerKey string, context string, api_version string, api string, resourcePath string, method string, version string, errorCode string, errorMessage string, requestTime long, userId string, tenantDomain string, hostName string, apiPublisher string, applicationName string, applicationId string, protocol string);*/
+
+@Export('org.wso2.error.alert.stream:1.0.0')
+define stream outputStreamError (api_version string, api string, apiPublisher string, fault_count long);
+
+@Export('org.wso2.warn.alert.stream:1.0.0')
+define stream outputStreamWarn (api_version string, api string, apiPublisher string, fault_count long);
+
+from inputStream[errorCode=='101503' or errorCode=='303001']#window.timeBatch(10 sec)
+select api_version,api,apiPublisher,count() as fault_count
+group by api_version,api,apiPublisher
+having fault_count>1
+insert into outputStreamWarn;
+
+from inputStream[errorCode=='101503' or errorCode=='303001']#window.timeBatch(2 min)
+select api_version,api,apiPublisher,count() as fault_count
+group by api_version,api,apiPublisher
+having fault_count>5
+insert into outputStreamError;

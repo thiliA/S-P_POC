@@ -1,0 +1,19 @@
+{
+  "streamId": "org.wso2.service.failure.notification.stream:1.0.0",
+  "name": "org.wso2.service.failure.notification.stream",
+  "version": "1.0.0",
+  "nickName": "",
+  "description": "",
+  "metaData": [],
+  "correlationData": [],
+  "payloadData": [
+    {
+      "name": "error_code",
+      "type": "STRING"
+    },
+    {
+      "name": "api_name",
+      "type": "STRING"
+    }
+  ]
+}
