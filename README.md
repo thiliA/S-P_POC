@@ -1,2 +1,2 @@
 # S-P_POC
-Contains artifacts
+Contains artifacts used for POC
